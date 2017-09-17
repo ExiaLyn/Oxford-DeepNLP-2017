@@ -38,7 +38,7 @@ Prerequisite: Probability, Linear Algebra, and Continuous Mathematics, basic Mac
 
 对于要编码的词，观察其左右两侧共w个词，统计属于词汇表C里的词的频次，组成一个向量。相当于用C中的词作为目标词的特征。
 
-例：（粗体为要编码的目标词）![1](./snap/1.png)
+例：（粗体为要编码的目标词）![1](./snap/2a-1.png)
 
 得到每个词的向量后，就可以用余弦值计算词与词之间的相似度。(附$cosine(u, v) = \frac {uv} {|u| |v|}$)
 
@@ -52,11 +52,11 @@ Prerequisite: Probability, Linear Algebra, and Continuous Mathematics, basic Mac
 
 **词嵌入矩阵$E$（word embedding matrix）**：每一行都代表目标词的词向量，每一列都代表基本词汇表C中的词在各个目标词的上下文中出现的频次。要取出某个词的词向量时，只需用它的one-hot向量的转置乘以矩阵E。
 
-![2](./snap/2.png)
+![2](./snap/2a-2.png)
 
 学习的目标是通过调整参数θ和*$E$*，使得定义的score函数值最高：
 
-![3](./snap/3.png)
+![3](./snap/2a-3.png)
 
 得分函数的定义非常关键，理想情况下，需要满足：
 
@@ -75,7 +75,7 @@ Prerequisite: Probability, Linear Algebra, and Continuous Mathematics, basic Mac
 
 过程如下：首先随机初始化词嵌入矩阵，用句中每个词的one-hot向量提取出初始的词向量w1,w2...wn；所有向量先通过浅层卷积（shallow convolution，最简单的就是每个向量的对应维度直接相加），再经由估分函数（scorer，一个MLP多层感知机）映射为一个*标量分值*。其中shallow convolution和scorer的参数集合为$\theta$。整个网络为句子s建模了一个函数$g_{\theta,E} (s)= f_{\theta}(embed_E(s))$.
 
-![4](./snap/4.png)
+![4](./snap/2a-4.png)
 
 如何防止网络忽略输入而输出高得分？在实际训练中，对每个句子s，我们随机污染其中的一些词，来抽样出一个干扰句子z（distractor sentence，例如a *cat* slept的干扰句子可以是a *car* slept），并使用[hinge loss](https://en.wikipedia.org/wiki/Hinge_loss)定义损失函数$L = max(0, \ 1-(g_{\theta,E}(s) - g_{\theta,E}(z) ))$，目的是为了让函数能很好地感知输入，产生合理的分值。 
 
@@ -97,7 +97,7 @@ CBoW: continuous-bag-of-words（连续词袋模型，不考虑词序的信息）
 
 【实际输出维度 >> 图中画的维度】
 
-![5](./snap/5.png)
+![5](./snap/2a-5.png)
 
 CBoW模型中没有隐藏层，且涉及的都是线性变换，所以运算起来比较快。但抛弃了词序信息，离中心词近的词可能提供更多信息，后来有改进的论文引入了position-specific matrix。
 
@@ -111,7 +111,7 @@ Skip-gram：用目标词（中心词）预测上下文中的词。
 
 过程：输入是中心词$w_n$从$E$中提取的词向量，直接连接到输出层做softmax，输出层的维度为Vocabulary的大小，每一维代表某个词$w_i$作为该中心词上下文（同时出现）的概率。
 
-![6](./snap/6.png)
+![6](./snap/2a-6.png)
 
 Skip-gram模型由于涉及的参数少，因此计算速度同样非常快，相似的改进有position-specific projections等，在计算效率和结构化程度上平衡。
 
