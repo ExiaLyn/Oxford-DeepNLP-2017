@@ -21,6 +21,7 @@ This repository contains:
 - 2017/9/16: Lecture-2a Note updated.
 - 2017/9/19: Practical-1 updated.
 - 2017/9/20: Lecture-2b Note updated.
+- 2017/9/23: Lecture-3 Note updated.
 
 Will gradually update notes and assignments :)
 
